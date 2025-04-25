@@ -1,30 +1,37 @@
 
 const express = require("express");
 const cors = require("cors");
-const axios = require("axios");
+const { MongoClient } = require("mongodb");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// ✅ Replace with your working Google Apps Script Web App URL
-const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec";
+// ✅ Replace this with your real MongoDB Atlas URI
+const MONGO_URI = "mongodb+srv://retainx_user:retainx123@cluster0.mongodb.net/retainx?retryWrites=true&w=majority";
 
 app.use(cors());
 app.use(express.json());
 
 app.post("/sync", async (req, res) => {
+  const client = new MongoClient(MONGO_URI);
   try {
-    const response = await axios.post(GOOGLE_SCRIPT_URL, req.body, {
-      headers: { "Content-Type": "application/json" }
-    });
-    console.log("✅ Synced:", response.data);
-    res.send("✅ Synced to Google Sheet!");
-  } catch (error) {
-    console.error("❌ Sync failed:", error.message);
-    res.status(500).send("❌ Sync failed: " + error.message);
+    await client.connect();
+    const db = client.db("retainx");
+    const collection = db.collection("customers");
+
+    const rows = req.body.rows;
+    if (!Array.isArray(rows)) throw new Error("Invalid data");
+
+    await collection.insertMany(rows);
+    res.send("✅ Data synced to MongoDB successfully!");
+  } catch (err) {
+    console.error("❌ MongoDB Insert Error:", err.message);
+    res.status(500).send("❌ Failed to insert data into MongoDB");
+  } finally {
+    await client.close();
   }
 });
 
 app.listen(PORT, () => {
-  console.log(`✅ RetainX Proxy running on port ${PORT}`);
+  console.log(`✅ RetainX MongoDB Proxy running on port ${PORT}`);
 });
