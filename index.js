@@ -7,7 +7,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // ✅ Replace this with your real MongoDB Atlas URI
-const MONGO_URI = "mongodb+srv://retainx_user:retainx123@cluster0.mongodb.net/retainx?retryWrites=true&w=majority";
+const MONGO_URI = "mongodb+srv://retainx_user:retainx123@cluster0.8hhzh2.mongodb.net/retainx?retryWrites=true&w=majority";
 
 app.use(cors());
 app.use(express.json());
