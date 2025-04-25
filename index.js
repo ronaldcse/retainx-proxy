@@ -7,7 +7,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // 🔗 Your Google Apps Script Web App URL (replace with your actual URL)
-const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec';
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx-NiCxB6a3CIlDzZxc5JWvUjH_cjEYdP0xd02YbommprqCe3HXLX_weRu9uLmWZp0N/exec';
 
 app.use(cors());
 app.use(express.json());
